@@ -1,0 +1,9 @@
+cp A.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri2448.cpp
+cp B.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri2456.cpp
+cp C.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri2451.cpp
+cp D.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri2449.cpp
+cp E.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri2450.cpp
+cp F.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri1515.cpp
+cp G.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri1514.cpp
+cp H.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri1516.cpp
+cp I.cpp ~/Dropbox/cdp-utfpr/cdp-utfpr-codes/uri1512.cpp
