@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+import sys
+from fractions import Fraction
+from math import gcd
+
+
+def AC(msg):
+  print(f'YES! {msg}')
+  sys.exit(4)
+
+
+def WA(msg):
+  print(f'NO :/ {msg}')
+  sys.exit(6)
+
+
+def BAD_JUDGE(msg):
+  print(f'unexpected judge behaviour, {msg}')
+  sys.exit(43)
+
+
+def parse_height(raw_height, on_error=WA):
+  (numerator, denominator) = map(int, raw_height.split())
+  if gcd(numerator, denominator) != 1:
+    on_error(f'height {numerator}/{denominator} is not irreductible')
+  return Fraction(numerator, denominator)
+
+
+def clean_content(file):
+  return list(filter(None, map(str.strip, file.readlines())))
+
+
+def parse_choices(raw, on_error):
+  try:
+    return None if raw == '*' else int(raw)
+  except Exception as e:
+    on_error(f'first line contains {raw}, expected * or an integer ({e})')
+
+
+def read_solution(filename):
+  with open(filename, 'r') as output_file:
+    solution = clean_content(output_file)
+  return solution
+
+
+def read_target_height(filename):
+  with open(filename, 'r') as input_file:
+    input = clean_content(input_file)
+  return parse_height(input[0], on_error=BAD_JUDGE)
+
+
+try:
+  team_output_fn = sys.argv[1]
+  sol_output_fn = sys.argv[2]
+  problem_input_fn = sys.argv[3]
+
+  judge_solution = read_solution(sol_output_fn)
+  target_height = read_target_height(problem_input_fn)
+  team_output = read_solution(team_output_fn)
+
+  if len(team_output) == 0:
+    WA('team output is empty')
+
+  if len(team_output) != len(judge_solution):
+    WA((f'length of solutions for {target_height} differ, team generated {len(team_output)} lines, '
+        f'but judges generated {len(judge_solution)} lines. teams first line = {team_output[0]} '
+        f'judges first line = {judge_solution[0]}'))
+
+  if judge_solution[0] == '*':
+    if team_output[0] != '*':
+      WA(f'team found a solution for {target_height} with {len(team_output)} heights')
+    elif len(team_output) > 1:
+      WA(f'team solution generated extra output: {team_output[1]}, ...')
+    else:
+      AC(f'outputs match, team and judges agree {target_height} is impossible')
+
+  step = 0
+  known_heights = set()
+  known_heights.add(Fraction(1, 1))
+
+  for rawL, rawR in zip(team_output[0::2], team_output[1::2]):
+    L = parse_height(rawL)
+    R = parse_height(rawR)
+    step += 1
+    if L not in known_heights:
+      WA(f'team used unknown height {L} at step {step}')
+    if R not in known_heights:
+      WA(f'team used unknown height {R} at step {step}')
+
+    last_height = (L * R) / (L + R)
+    known_heights.add(last_height)
+
+  if last_height != target_height:
+    WA(f'team choices of heights result in {last_height}, expected {target_height}')
+
+  AC(f'team and judge generate {target_height} with {len(judge_solution)} height choices')
+except Exception as e:
+  BAD_JUDGE(f'something bad happened: {e}')
